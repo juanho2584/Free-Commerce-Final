@@ -1,4 +1,5 @@
 
+
 document.addEventListener("DOMContentLoaded", function () {
   const cart = [];
   const cartContainer = document.getElementById("cart-container");
@@ -7,6 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const cartCount = document.getElementById("cart-count");
   const cartTotal = document.getElementById("cart-total");
   const productButtons = document.querySelectorAll(".btn-add-to-cart");
+  const buyNowButton = document.getElementById("buy-now"); // Botón Comprar
 
   // Mostrar/Ocultar carrito
   cartButton.addEventListener("click", function () {
@@ -92,4 +94,32 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     updateCart();
   };
+
+  // Comprar productos
+  buyNowButton.addEventListener("click", function () {
+    if (cart.length === 0) {
+      alert("El carrito está vacío. Agrega productos antes de comprar.");
+      return;
+    }
+
+    const confirmation = confirm("¿Estás seguro de que deseas confirmar la compra?");
+    if (confirmation) {
+      // Guardar datos en Local Storage
+      const total = parseFloat(cartTotal.innerText);
+      const cartData = {
+        products: cart,
+        total: total
+      };
+      localStorage.setItem("cart", JSON.stringify(cartData));
+      console.log("Datos del carrito guardados en Local Storage:", cartData);
+
+      // Mostrar mensaje de compra exitosa
+      alert(`¡Gracias por tu compra! El total fue $${total.toFixed(2)}.`);
+
+      // Resetear el carrito
+      cart.length = 0; // Vaciar el carrito
+      updateCart();
+    }
+  });
 });
+
